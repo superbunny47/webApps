@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-a+((q4ycc5ubzdd!=@*#o=ntr$$c*m!9luxvsd8t+0m%-tg&pi
 DEBUG = False
 
 ALLOWED_HOSTS = ["ec2-44-202-168-195.compute-1.amazonaws.com"]
-SITE_URL = "http://127.0.0.1:8000"
+SITE_URL = "http://ec2-44-202-168-195.compute-1.amazonaws.com"
 
 # Application definition
 
