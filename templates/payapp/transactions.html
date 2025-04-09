@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Your Transactions</h2>
+
+  <h4>Sent Payments</h4>
+  {% if sent %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>To</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in sent %}
+          <tr>
+            <td>{{ transaction.receiver.username }}</td>
+            <td>{{ transaction.amount }} {{ transaction.receiver.currency }}</td>
+            <td>{{ transaction.timestamp }}</td>
+            <td>{{ transaction.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No sent transactions.</p>
+  {% endif %}
+
+  <h4 class="mt-5">Received Payments</h4>
+  {% if received %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in received %}
+          <tr>
+            <td>{{ transaction.sender.username }}</td>
+            <td>{{ transaction.amount }} {{ user.currency }}</td>
+            <td>{{ transaction.timestamp }}</td>
+            <td>{{ transaction.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No received transactions.</p>
+  {% endif %}
+
+  <h4 class="mt-5">Sent Requests</h4>
+  {% if requests_sent %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>To</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in requests_sent %}
+          <tr>
+            <td>{{ request.target.username }}</td>
+            <td>{{ request.amount }} {{ user.currency }}</td>
+            <td>{{ request.timestamp }}</td>
+            <td>{{ request.status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No sent payment requests.</p>
+  {% endif %}
+
+  <h4 class="mt-5">Received Requests</h4>
+  {% if requests_received %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>From</th>
+          <th>In Your Currency</th>
+          <th>Original</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in requests_received %}
+          <tr>
+            <td>{{ request.requester.username }}</td>
+            <td>{{ request.display_amount }} {{ request.display_currency }}</td>
+            <td>{{ request.amount }} {{ request.requester.currency }}</td>
+            <td>{{ request.timestamp }}</td>
+            <td>{{ request.status }}</td>
+            <td>
+              {% if request.status == 'pending' %}
+                <form method="post" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="payment_request_id" value="{{ request.id }}">
+                  <input type="hidden" name="action" value="accept">
+                  <button type="submit" class="btn btn-sm btn-outline-success">Accept</button>
+                </form>
+                <form method="post" class="d-inline">
+                  {% csrf_token %}
+                  <input type="hidden" name="payment_request_id" value="{{ request.id }}">
+                  <input type="hidden" name="action" value="decline">
+                  <button type="submit" class="btn btn-sm btn-outline-danger">Decline</button>
+                </form>
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No received payment requests.</p>
+  {% endif %}
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+{% endblock %}

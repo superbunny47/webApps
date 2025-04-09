@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Online Payment Service{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="mb-4">
+                <h2 class="fw-bold text-primary">Welcome, {{ user.username }}!</h2>
+                <p class="lead">Here’s your financial dashboard.</p>
+            </div>
+
+            <div class="alert alert-info shadow-sm fs-5">
+                <strong>Your Balance:</strong> {{ user.currency }} {{ user.balance }}
+            </div>
+
+            <div class="row mt-4 g-3 justify-content-center">
+                <div class="col-12 col-md-4">
+                    <a href="{% url 'payapp:pay' %}" class="btn btn-success w-100 py-3">
+                        Make a Payment
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a href="{% url 'payapp:request' %}" class="btn btn-warning w-100 py-3">
+                        Payment Request
+                    </a>
+                </div>
+                <div class="col-12 col-md-4">
+                    <a href="{% url 'payapp:transactions' %}" class="btn btn-info w-100 py-3">
+                        Transactions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
